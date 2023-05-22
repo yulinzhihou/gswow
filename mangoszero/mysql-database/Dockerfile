@@ -12,13 +12,10 @@ ENV MANGOS_DB_RELEASE=Rel21
 ENV MYSQL_USER=mangos
 ENV MYSQL_PASSWORD=mangos
 
-RUN apt-get update && \
-    apt-get install git wget -y && \
-    git clone https://github.com/mangoszero/database.git -b ${MANGOS_DATABASE_VERSION} --recursive && \
-    wget --no-check-certificate https://raw.githubusercontent.com/StephenSorriaux/mangos-docker/master/launch_mysql.sh && \
-    chmod a+x launch_mysql.sh && \
-    apt-get remove --purge --force-yes -y git wget && \
-    rm -rf /var/lib/apt/lists/*
+ADD database.tar.gz ./
+ADD launch_mysql.sh ./
+
+RUN chmod a+x launch_mysql.sh
 
 ENTRYPOINT ["./launch_mysql.sh"]
 CMD ["mysqld"]
